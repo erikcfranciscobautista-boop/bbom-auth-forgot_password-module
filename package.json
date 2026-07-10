@@ -1,0 +1,41 @@
+{
+  "name": "@uuaas-bbom/bbom-auth-forgot-password-module",
+  "version": "0.1.0",
+  "private": false,
+  "description": "BBOM auth forgot password orchestration module",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit",
+    "localhost": "node --loader ts-node/esm test/run-local.ts",
+    "test": "TS_NODE_PROJECT=tsconfig.test.json node --loader ts-node/esm --test test/**/*.test.ts",
+    "test:isolated": "TS_NODE_PROJECT=tsconfig.test.json node --loader ts-node/esm --test test/**/*.test.ts",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^22.10.2",
+    "fastify": "^5.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
