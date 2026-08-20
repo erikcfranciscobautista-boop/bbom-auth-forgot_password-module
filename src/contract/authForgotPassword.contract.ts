@@ -1,7 +1,9 @@
-import type { GetBcpmStatusesStatusIdPort } from "./ports/getBcpmStatusesStatusId.port.js";
-import type { PostBurmCredentialsRecoveryTokenPort } from "./ports/postBurmCredentialsRecoveryToken.port.js";
-import type { PostBurmProfilesSearchPort } from "./ports/postBurmProfilesSearch.port.js";
-import type { AuthForgotPasswordInDto } from "../dto/authForgotPassword.in.dto.js";
+import type {
+  GetBcpmStatusesStatusIdPort,
+  PostBurmCredentialsRecoveryTokenPort,
+  PostBurmProfilesSearchPort,
+} from "./ports/index.ports.js";
+import type { AuthForgotPasswordInDto } from "../dto/index.dto.js";
 
 export interface AuthForgotPasswordLogger {
   info: (message: string, metadata?: Record<string, unknown>) => void;

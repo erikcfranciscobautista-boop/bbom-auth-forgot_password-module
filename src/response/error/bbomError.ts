@@ -1,4 +1,4 @@
-import type { AuthForgotPasswordErrorOutDto } from "../dto/authForgotPassword.error.dto.js";
+import type { AuthForgotPasswordErrorOutDto } from "../../dto/index.dto.js";
 
 export class BbomClientError extends Error {
   readonly response: AuthForgotPasswordErrorOutDto;

@@ -1,5 +1,5 @@
 import { BbomClientError, BbomConnectionError } from "./bbomError.js";
-import type { AuthForgotPasswordErrorOutDto } from "../dto/authForgotPassword.error.dto.js";
+import type { AuthForgotPasswordErrorOutDto } from "../../dto/index.dto.js";
 
 export const AuthForgotPasswordErrorConnectionBurm: AuthForgotPasswordErrorOutDto = {
   errorType: "BBOM-CONNECTION",

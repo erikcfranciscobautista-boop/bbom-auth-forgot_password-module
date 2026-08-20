@@ -1,8 +1,12 @@
-import type { GetBcpmStatusesStatusIdOutput } from "../../contract/ports/getBcpmStatusesStatusId.port.js";
-import type { GetBcpmStatusesStatusIdPort } from "../../contract/ports/getBcpmStatusesStatusId.port.js";
-import type { AuthForgotPasswordLogger } from "../../contract/authForgotPassword.contract.js";
-import { BbomConnectionError } from "../../errors/bbomError.js";
-import { AuthForgotPasswordErrorConnectionBcpm } from "../../errors/authForgotPassword.errors.js";
+import type {
+  AuthForgotPasswordLogger,
+  GetBcpmStatusesStatusIdOutput,
+  GetBcpmStatusesStatusIdPort,
+} from "../../contract/index.contract.js";
+import {
+  AuthForgotPasswordErrorConnectionBcpm,
+  BbomConnectionError,
+} from "../../response/error/index.error.js";
 
 export const jstepGetBcpmStatusesStatusId = async ({
   bcpmStatusId,

@@ -1,7 +1,11 @@
-import type { PostBurmCredentialsRecoveryTokenPort } from "../../contract/ports/postBurmCredentialsRecoveryToken.port.js";
-import type { AuthForgotPasswordLogger } from "../../contract/authForgotPassword.contract.js";
-import { BbomConnectionError } from "../../errors/bbomError.js";
-import { AuthForgotPasswordErrorConnectionBurm } from "../../errors/authForgotPassword.errors.js";
+import type {
+  AuthForgotPasswordLogger,
+  PostBurmCredentialsRecoveryTokenPort,
+} from "../../contract/index.contract.js";
+import {
+  AuthForgotPasswordErrorConnectionBurm,
+  BbomConnectionError,
+} from "../../response/error/index.error.js";
 
 export const jstepPostBurmCredentialsRecoveryToken = async ({
   burmUserId,

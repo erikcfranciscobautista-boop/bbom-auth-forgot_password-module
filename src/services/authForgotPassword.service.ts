@@ -1,22 +1,22 @@
 import type {
   AuthForgotPasswordContract,
   AuthForgotPasswordLogger,
-} from "../contract/authForgotPassword.contract.js";
-import type { AuthForgotPasswordInDto } from "../dto/authForgotPassword.in.dto.js";
-import type { AuthForgotPasswordOutDto } from "../dto/authForgotPassword.out.dto.js";
-import { obfuscateIdentifier } from "../utils/obfuscate.js";
-import { jstepGetBcpmStatusesStatusId } from "./stepts/getBcpmStatusesStatusIdStep.js";
-import { jstepPostBurmCredentialsRecoveryToken } from "./stepts/postBurmCredentialsRecoveryTokenStep.js";
-import { jstepPostBurmProfilesSearch } from "./stepts/postBurmProfilesSearchStep.js";
-import type {
-  GetBcpmStatusesStatusIdPort
-} from "../contract/ports/getBcpmStatusesStatusId.port.js";
-import type { PostBurmCredentialsRecoveryTokenPort } from "../contract/ports/postBurmCredentialsRecoveryToken.port.js";
-import type { PostBurmProfilesSearchPort } from "../contract/ports/postBurmProfilesSearch.port.js";
-
-const SUCCESS_RESPONSE: AuthForgotPasswordOutDto = {
-  message: "Si el usuario existe, recibiras una notificacion de recuperacion",
-};
+  GetBcpmStatusesStatusIdPort,
+  PostBurmCredentialsRecoveryTokenPort,
+  PostBurmProfilesSearchPort,
+} from "../contract/index.contract.js";
+import type { AuthForgotPasswordInDto, AuthForgotPasswordOutDto } from "../dto/index.dto.js";
+import { obfuscateIdentifier } from "../utils/index.utils.js";
+import {
+  AuthForgotPasswordErrorFormat,
+  BbomClientError,
+} from "../response/error/index.error.js";
+import {
+  jstepGetBcpmStatusesStatusId,
+  jstepPostBurmCredentialsRecoveryToken,
+  jstepPostBurmProfilesSearch,
+} from "./stepts/index.steps.js";
+import { SUCCESS_RESPONSE } from "../response/index.response.js";
 
 const buildLogger = (logger?: AuthForgotPasswordLogger): AuthForgotPasswordLogger => {
   if (logger) {
@@ -28,6 +28,16 @@ const buildLogger = (logger?: AuthForgotPasswordLogger): AuthForgotPasswordLogge
     warn: (message, metadata) => console.warn(message, metadata),
     error: (message, metadata) => console.error(message, metadata),
   };
+};
+
+const getMissingFields = (input: AuthForgotPasswordInDto): string[] => {
+  const missingFields: string[] = [];
+
+  if (!input.username || !input.username.trim()) {
+    missingFields.push("username");
+  }
+
+  return missingFields;
 };
 
 export class AuthForgotPasswordService {
@@ -47,6 +57,17 @@ export class AuthForgotPasswordService {
     input: AuthForgotPasswordInDto,
   ): Promise<AuthForgotPasswordOutDto> {
     try {
+      const missingFields = getMissingFields(input);
+      if (missingFields.length > 0) {
+        throw new BbomClientError({
+          ...AuthForgotPasswordErrorFormat,
+          details: {
+            ...AuthForgotPasswordErrorFormat.details,
+            missingFields,
+          },
+        });
+      }
+
       this.logger.info("-----------------------------------------------------");
       this.logger.info("start - executeAuthForgotPasswordService");
       this.logger.info("-----------------------------------------------------");

@@ -37,7 +37,7 @@ server.post("/auth/forgot-password", async (request, reply) => {
     reply.status(200).send(result);
   } catch (error) {
     const mapped = AuthForgotPasswordErrorService.mapErrorResponse(error);
-    reply.status(mapped.errorCode).send(mapped);
+    reply.status(mapped.statusCode).send(mapped);
   }
 });
 
