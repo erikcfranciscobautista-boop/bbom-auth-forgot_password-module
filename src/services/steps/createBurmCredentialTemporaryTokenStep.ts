@@ -1,33 +1,33 @@
 import type {
   AuthForgotPasswordLogger,
-  PostBurmCredentialTemporaryTokensPort,
+  CreateBurmCredentialTemporaryTokenPort,
 } from "../../contract/index.contract.js";
 import { AuthForgotPasswordErrorConnectionBurm } from "../../errors/index.errors.js";
 
-export const jstepPostBurmCredentialTemporaryTokens = async ({
+export const stepPostBurmCredentialTemporaryToken = async ({
   burmUserId,
   bcpmStatusId,
   bcpmDepartmentId,
   bcpmRoleId,
-  obfuscatedUsername,
-  postBurmCredentialTemporaryTokens,
+  username,
+  createBurmCredentialTemporaryToken,
   logger,
 }: {
   burmUserId: string;
   bcpmStatusId: string;
   bcpmDepartmentId: string;
   bcpmRoleId: string;
-  obfuscatedUsername: string;
-  postBurmCredentialTemporaryTokens: PostBurmCredentialTemporaryTokensPort;
+  username: string;
+  createBurmCredentialTemporaryToken: CreateBurmCredentialTemporaryTokenPort;
   logger: AuthForgotPasswordLogger;
 }
 ): Promise<void> => {
   logger.info("Calling BURM postBurmCredentialTemporaryTokens", {
-    username: obfuscatedUsername,
+    username: username,
   });
 
   try {
-    await postBurmCredentialTemporaryTokens({
+    await createBurmCredentialTemporaryToken({
       burmUserId,
       bcpmStatusId,
       bcpmDepartmentId,
@@ -35,11 +35,11 @@ export const jstepPostBurmCredentialTemporaryTokens = async ({
     });
 
     logger.info("BURM postBurmCredentialTemporaryTokens succeeded", {
-      username: obfuscatedUsername,
+      username: username,
     });
   } catch {
     logger.error("Failed during BURM temporary token creation", {
-      username: obfuscatedUsername,
+      username: username,
     });
     throw AuthForgotPasswordErrorConnectionBurm;
   }

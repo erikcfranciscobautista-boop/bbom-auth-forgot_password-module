@@ -1,6 +1,6 @@
 export { AuthForgotPasswordService } from "./authForgotPassword.service.js";
 export {
-  jstepGetBcpmStatusesOne,
-  jstepGetBurmUserProfileIdentifiersUnique,
-  jstepPostBurmCredentialTemporaryTokens,
+  stepGetBcpmStatusValidateActive,
+  stepGetBurmUserProfileIdentifier,
+  stepPostBurmCredentialTemporaryToken,
 } from "./steps/index.steps.js";

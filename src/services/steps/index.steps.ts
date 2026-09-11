@@ -1,3 +1,3 @@
-export { jstepGetBcpmStatusesOne } from "./getBcpmStatusesOneStep.js";
-export { jstepPostBurmCredentialTemporaryTokens } from "./postBurmCredentialTemporaryTokensStep.js";
-export { jstepGetBurmUserProfileIdentifiersUnique } from "./getBurmUserProfileIdentifiersUniqueStep.js";
+export { stepGetBcpmStatusValidateActive } from "./getBcpmStatusValidateActiveStep.js";
+export { stepPostBurmCredentialTemporaryToken } from "./createBurmCredentialTemporaryTokenStep.js";
+export { stepGetBurmUserProfileIdentifier } from "./getBurmUserProfileIdentifierStep.js";

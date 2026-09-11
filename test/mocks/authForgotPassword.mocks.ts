@@ -2,11 +2,11 @@ import type { AuthForgotPasswordContract } from "../../src/contract/index.contra
 import type { AuthForgotPasswordInDto } from "../../src/dto/index.dto.js";
 
 export const mockGetBurmUserProfileIdentifiersUniqueOKPort = async ({
-  burmUserName,
+  username,
 }: {
-  burmUserName?: string;
+  username?: string;
 }) => {
-  if (burmUserName === "notfound") {
+  if (username === "notfound") {
     const error = new Error("Profile not found") as Error & { statusCode: number };
     error.statusCode = 404;
     throw error;
@@ -26,10 +26,7 @@ export const mockGetBurmUserProfileIdentifiersUniqueOKPort = async ({
 
 export const mockGetBcpmStatusesOneOKPort = async () => {
   return {
-    bcpmStatusId: "status-1",
-    bcpmStatusKey: "ACTIVE",
-    bcpmStatusName: "Activo",
-    bcpmStatusType: "OPERATIVE",
+    validate: true,
   };
 };
 
@@ -43,9 +40,9 @@ export const buildHappyPathContract = (
   return {
     req,
     ports: {
-      getBurmUserProfileIdentifiersUniquePort: mockGetBurmUserProfileIdentifiersUniqueOKPort,
+      getBurmUserProfileIdentifierPort: mockGetBurmUserProfileIdentifiersUniqueOKPort,
       getBcpmStatusesOnePort: mockGetBcpmStatusesOneOKPort,
-      postBurmCredentialTemporaryTokensPort: mockPostBurmCredentialTemporaryTokensOKPort,
+      createBurmCredentialTemporaryTokenPort: mockPostBurmCredentialTemporaryTokensOKPort,
     },
     logger: {
       info: () => undefined,

@@ -1,9 +1,8 @@
 import type {
-  GetBcpmStatusesOnePort,
-  GetBurmUserProfileIdentifiersUniquePort,
-  PostBurmCredentialTemporaryTokensPort,
+  GetBurmUserProfileIdentifierPort,
+  GetBcpmStatusValidateActivePort,
+  CreateBurmCredentialTemporaryTokenPort,
 } from "./ports/index.ports.js";
-import type { AuthForgotPasswordInDto } from "../dto/index.dto.js";
 
 export interface AuthForgotPasswordLogger {
   info?: (...args: unknown[]) => void;
@@ -15,20 +14,22 @@ export interface AuthForgotPasswordLogger {
 export interface AuthForgotPasswordContract {
   req: unknown;
   ports: {
-    getBurmUserProfileIdentifiersUniquePort: GetBurmUserProfileIdentifiersUniquePort;
-    getBcpmStatusesOnePort: GetBcpmStatusesOnePort;
-    postBurmCredentialTemporaryTokensPort: PostBurmCredentialTemporaryTokensPort;
+    getBurmUserProfileIdentifierPort: GetBurmUserProfileIdentifierPort;
+    getBcpmStatusesOnePort: GetBcpmStatusValidateActivePort;
+    createBurmCredentialTemporaryTokenPort: CreateBurmCredentialTemporaryTokenPort;
   };
   logger?: AuthForgotPasswordLogger;
 }
 
 export type {
-  GetBcpmStatusesOneInput,
-  GetBcpmStatusesOneOutput,
-  GetBcpmStatusesOnePort,
-  GetBurmUserProfileIdentifiersUniqueInput,
-  GetBurmUserProfileIdentifiersUniqueOutput,
-  GetBurmUserProfileIdentifiersUniquePort,
-  PostBurmCredentialTemporaryTokensInput,
-  PostBurmCredentialTemporaryTokensPort,
+  GetBcpmStatusValidateActiveRequest,
+  GetBcpmStatusValidateActiveResponse,
+  GetBcpmStatusValidateActivePort,
+
+  GetBurmUserProfileIdentifierRequest,
+  GetBurmUserProfileIdentifierResponse,
+  GetBurmUserProfileIdentifierPort,
+
+  CreateBurmCredentialTemporaryTokenRequest,
+  CreateBurmCredentialTemporaryTokenPort,
 } from './ports/index.ports.ts'
