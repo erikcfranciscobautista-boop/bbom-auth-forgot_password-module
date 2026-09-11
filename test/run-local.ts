@@ -1,18 +1,20 @@
 import Fastify from "fastify";
 import {
   authForgotPassword,
-  AuthForgotPasswordErrorService,
+  AuthForgotPasswordError,
+  AuthForgotPasswordErrorInternal,
+  AuthForgotPasswordSwagger,
   type AuthForgotPasswordContract,
 } from "../src/index.js";
 import {
-  mockGetBcpmStatusesStatusIdOKPort,
-  mockPostBurmCredentialsRecoveryTokenOKPort,
-  mockPostBurmProfilesSearchOKPort,
+  mockGetBcpmStatusesOneOKPort,
+  mockGetBurmUserProfileIdentifiersUniqueOKPort,
+  mockPostBurmCredentialTemporaryTokensOKPort,
 } from "./mocks/authForgotPassword.mocks.js";
 
 const server = Fastify({ logger: true });
 
-server.post("/auth/forgot-password", async (request, reply) => {
+server.post("/auth/forgot-password", { schema: AuthForgotPasswordSwagger }, async (request, reply) => {
   try {
     const body = request.body as { username: string };
     const requestLogger = request.log.child({
@@ -26,9 +28,9 @@ server.post("/auth/forgot-password", async (request, reply) => {
         username: body.username,
       },
       ports: {
-        postBurmProfilesSearchPort: mockPostBurmProfilesSearchOKPort,
-        getBcpmStatusesStatusIdPort: mockGetBcpmStatusesStatusIdOKPort,
-        postBurmCredentialsRecoveryTokenPort: mockPostBurmCredentialsRecoveryTokenOKPort,
+        getBurmUserProfileIdentifiersUniquePort: mockGetBurmUserProfileIdentifiersUniqueOKPort,
+        getBcpmStatusesOnePort: mockGetBcpmStatusesOneOKPort,
+        postBurmCredentialTemporaryTokensPort: mockPostBurmCredentialTemporaryTokensOKPort,
       },
       logger: requestLogger,
     };
@@ -36,7 +38,7 @@ server.post("/auth/forgot-password", async (request, reply) => {
     const result = await authForgotPassword(mockContract);
     reply.status(200).send(result);
   } catch (error) {
-    const mapped = AuthForgotPasswordErrorService.mapErrorResponse(error);
+    const mapped = error instanceof AuthForgotPasswordError ? error : AuthForgotPasswordErrorInternal;
     reply.status(mapped.statusCode).send(mapped);
   }
 });

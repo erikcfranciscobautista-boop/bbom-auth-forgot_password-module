@@ -1,9 +1,13 @@
 export { authForgotPassword } from "./authForgotPassword.js";
-export { AuthForgotPasswordErrorService } from "./response/error/index.error.js";
+export { AuthForgotPasswordError } from "./errors/index.error.js";
+export {
+  AuthForgotPasswordErrorConnectionBcpm,
+  AuthForgotPasswordErrorConnectionBurm,
+  AuthForgotPasswordErrorFormat,
+  AuthForgotPasswordErrorInternal,
+} from "./errors/index.errors.js";
 export type { AuthForgotPasswordContract } from "./contract/index.contract.js";
 export type {
   AuthForgotPasswordInDto,AuthForgotPasswordOutDto
 } from "./dto/index.dto.js";
-export type {
-  AuthForgotPasswordErrorOutDto,
-} from "./dto/index.dto.js";
+export { AuthForgotPasswordSwagger } from "./swagger/index.swagger.js";

@@ -1,14 +1,14 @@
 export type {
-  GetBcpmStatusesStatusIdInput,
-  GetBcpmStatusesStatusIdOutput,
-  GetBcpmStatusesStatusIdPort,
-} from "./getBcpmStatusesStatusId.port.js";
+  GetBcpmStatusesOneInput,
+  GetBcpmStatusesOneOutput,
+  GetBcpmStatusesOnePort,
+} from "./getBcpmStatusesOne.port.js";
 export type {
-  PostBurmCredentialsRecoveryTokenInput,
-  PostBurmCredentialsRecoveryTokenPort,
-} from "./postBurmCredentialsRecoveryToken.port.js";
+  PostBurmCredentialTemporaryTokensInput,
+  PostBurmCredentialTemporaryTokensPort,
+} from "./postBurmCredentialTemporaryTokens.port.js";
 export type {
-  PostBurmProfilesSearchInput,
-  PostBurmProfilesSearchOutput,
-  PostBurmProfilesSearchPort,
-} from "./postBurmProfilesSearch.port.js";
+  GetBurmUserProfileIdentifiersUniqueInput,
+  GetBurmUserProfileIdentifiersUniqueOutput,
+  GetBurmUserProfileIdentifiersUniquePort,
+} from "./getBurmUserProfileIdentifiersUnique.port.js";

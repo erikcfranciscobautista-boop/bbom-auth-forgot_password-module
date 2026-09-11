@@ -1,4 +1,4 @@
-export const extractStatusCode = (error: unknown): number | undefined => {
+export const getStatusCode = (error: unknown): number | undefined => {
   if (typeof error !== "object" || error === null) {
     return undefined;
   }

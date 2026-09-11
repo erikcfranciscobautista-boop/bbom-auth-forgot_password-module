@@ -1,22 +1,30 @@
-import type { AuthForgotPasswordContract } from "../../src/contract/authForgotPassword.contract.js";
-import type { AuthForgotPasswordInDto } from "../../src/dto/authForgotPassword.in.dto.js";
+import type { AuthForgotPasswordContract } from "../../src/contract/index.contract.js";
+import type { AuthForgotPasswordInDto } from "../../src/dto/index.dto.js";
 
-export const mockPostBurmProfilesSearchOKPort = async ({ username }: { username: string }) => {
-  if (username === "notfound") {
+export const mockGetBurmUserProfileIdentifiersUniqueOKPort = async ({
+  burmUserName,
+}: {
+  burmUserName?: string;
+}) => {
+  if (burmUserName === "notfound") {
     const error = new Error("Profile not found") as Error & { statusCode: number };
     error.statusCode = 404;
     throw error;
   }
 
   return {
-    burmUserId: "burm-user-1",
-    bcpmStatusId: "status-1",
-    burmUserEmail: "user@example.com",
-    burmUserPhone: "5530123456",
+    burmUser: {
+      burmUserId: "burm-user-1",
+    },
+    burmProfile: {
+      bcpmRoleId: "role-1",
+      bcpmStatusId: "status-1",
+      bcpmDepartmentId: "department-1",
+    },
   };
 };
 
-export const mockGetBcpmStatusesStatusIdOKPort = async () => {
+export const mockGetBcpmStatusesOneOKPort = async () => {
   return {
     bcpmStatusId: "status-1",
     bcpmStatusKey: "ACTIVE",
@@ -25,7 +33,7 @@ export const mockGetBcpmStatusesStatusIdOKPort = async () => {
   };
 };
 
-export const mockPostBurmCredentialsRecoveryTokenOKPort = async () => {
+export const mockPostBurmCredentialTemporaryTokensOKPort = async () => {
   return;
 };
 
@@ -35,9 +43,9 @@ export const buildHappyPathContract = (
   return {
     req,
     ports: {
-      postBurmProfilesSearchPort: mockPostBurmProfilesSearchOKPort,
-      getBcpmStatusesStatusIdPort: mockGetBcpmStatusesStatusIdOKPort,
-      postBurmCredentialsRecoveryTokenPort: mockPostBurmCredentialsRecoveryTokenOKPort,
+      getBurmUserProfileIdentifiersUniquePort: mockGetBurmUserProfileIdentifiersUniqueOKPort,
+      getBcpmStatusesOnePort: mockGetBcpmStatusesOneOKPort,
+      postBurmCredentialTemporaryTokensPort: mockPostBurmCredentialTemporaryTokensOKPort,
     },
     logger: {
       info: () => undefined,
@@ -46,3 +54,4 @@ export const buildHappyPathContract = (
     },
   };
 };
+

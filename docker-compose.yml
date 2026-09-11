@@ -1,29 +1,19 @@
 services:
-  bbom-auth-forgot-password-module-localhost:
-    build: 
+  service-auth-forgot-password:
+    build:
       context: ./
       dockerfile: Dockerfile
+    container_name: container-auth-forgot-password
     ports:
-      - "3001:3000"
+      - "3000:3000"
     command: npm run localhost
     volumes:
       - .:/app
       - /app/node_modules
     develop:
       watch:
-      - action: sync
-        path: ./src
-        target: /app/src
-      - action: rebuild
-        path: package.json
-
-  bbom-auth-forgot-password-tests:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    command: npm run test:isolated
-    volumes:
-      - .:/app
-      - /app/node_modules
-    profiles:
-      - test
+        - action: sync
+          path: ./src
+          target: /app/src
+        - action: rebuild
+          path: package.json

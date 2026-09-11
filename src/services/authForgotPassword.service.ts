@@ -1,88 +1,53 @@
 import type {
   AuthForgotPasswordContract,
   AuthForgotPasswordLogger,
-  GetBcpmStatusesStatusIdPort,
-  PostBurmCredentialsRecoveryTokenPort,
-  PostBurmProfilesSearchPort,
+  GetBcpmStatusesOnePort,
+  GetBurmUserProfileIdentifiersUniquePort,
+  PostBurmCredentialTemporaryTokensPort,
 } from "../contract/index.contract.js";
-import type { AuthForgotPasswordInDto, AuthForgotPasswordOutDto } from "../dto/index.dto.js";
+import type { AuthForgotPasswordOutDto } from "../dto/index.dto.js";
+import type { AuthForgotPasswordInDto } from "../dto/index.dto.js";
 import { obfuscateIdentifier } from "../utils/index.utils.js";
 import {
-  AuthForgotPasswordErrorFormat,
-  BbomClientError,
-} from "../response/error/index.error.js";
-import {
-  jstepGetBcpmStatusesStatusId,
-  jstepPostBurmCredentialsRecoveryToken,
-  jstepPostBurmProfilesSearch,
-} from "./stepts/index.steps.js";
+  jstepGetBcpmStatusesOne,
+  jstepGetBurmUserProfileIdentifiersUnique,
+  jstepPostBurmCredentialTemporaryTokens,
+} from "./steps/index.steps.js";
 import { SUCCESS_RESPONSE } from "../response/index.response.js";
 
-const buildLogger = (logger?: AuthForgotPasswordLogger): AuthForgotPasswordLogger => {
-  if (logger) {
-    return logger;
-  }
-
-  return {
-    info: (message, metadata) => console.info(message, metadata),
-    warn: (message, metadata) => console.warn(message, metadata),
-    error: (message, metadata) => console.error(message, metadata),
-  };
-};
-
-const getMissingFields = (input: AuthForgotPasswordInDto): string[] => {
-  const missingFields: string[] = [];
-
-  if (!input.username || !input.username.trim()) {
-    missingFields.push("username");
-  }
-
-  return missingFields;
-};
-
 export class AuthForgotPasswordService {
-  private postBurmProfilesSearch: PostBurmProfilesSearchPort;
-  private getBcpmStatusesStatusId: GetBcpmStatusesStatusIdPort;
-  private postBurmCredentialsRecoveryToken: PostBurmCredentialsRecoveryTokenPort;
+  private getBurmUserProfileIdentifiersUnique: GetBurmUserProfileIdentifiersUniquePort;
+  private getBcpmStatusesOne: GetBcpmStatusesOnePort;
+  private postBurmCredentialTemporaryTokens: PostBurmCredentialTemporaryTokensPort;
   private logger: AuthForgotPasswordLogger;
 
   constructor(options: AuthForgotPasswordContract) {
-    this.postBurmProfilesSearch = options.ports.postBurmProfilesSearchPort;
-    this.getBcpmStatusesStatusId = options.ports.getBcpmStatusesStatusIdPort;
-    this.postBurmCredentialsRecoveryToken = options.ports.postBurmCredentialsRecoveryTokenPort;
-    this.logger = buildLogger(options.logger);
+    this.getBurmUserProfileIdentifiersUnique = options.ports.getBurmUserProfileIdentifiersUniquePort;
+    this.getBcpmStatusesOne = options.ports.getBcpmStatusesOnePort;
+    this.postBurmCredentialTemporaryTokens = options.ports.postBurmCredentialTemporaryTokensPort;
+    this.logger = options.logger ?? console;
   }
 
+
   async executeAuthForgotPasswordService(
-    input: AuthForgotPasswordInDto,
+    request: AuthForgotPasswordInDto,
   ): Promise<AuthForgotPasswordOutDto> {
     try {
-      const missingFields = getMissingFields(input);
-      if (missingFields.length > 0) {
-        throw new BbomClientError({
-          ...AuthForgotPasswordErrorFormat,
-          details: {
-            ...AuthForgotPasswordErrorFormat.details,
-            missingFields,
-          },
-        });
-      }
-
       this.logger.info("-----------------------------------------------------");
       this.logger.info("start - executeAuthForgotPasswordService");
       this.logger.info("-----------------------------------------------------");
 
-      const { username } = input;
+      const { username } = request;
       const obfuscatedUsername = obfuscateIdentifier(username);
 
       this.logger.info("Forgot password flow started", {
         username: obfuscatedUsername,
       });
 
-      const profile = await jstepPostBurmProfilesSearch({
+      const profile = await jstepGetBurmUserProfileIdentifiersUnique({
         username,
         obfuscatedUsername,
-        postBurmProfilesSearch: this.postBurmProfilesSearch,
+        getBurmUserProfileIdentifiersUnique: this.getBurmUserProfileIdentifiersUnique,
         logger: this.logger,
       });
 
@@ -90,10 +55,10 @@ export class AuthForgotPasswordService {
         return SUCCESS_RESPONSE;
       }
 
-      const status = await jstepGetBcpmStatusesStatusId({
-        bcpmStatusId: profile.bcpmStatusId,
+      const status = await jstepGetBcpmStatusesOne({
+        bcpmStatusId: profile.burmProfile.bcpmStatusId,
         obfuscatedUsername,
-        getBcpmStatusesStatusId: this.getBcpmStatusesStatusId,
+        getBcpmStatusesOne: this.getBcpmStatusesOne,
         logger: this.logger,
       });
 
@@ -101,12 +66,13 @@ export class AuthForgotPasswordService {
         return SUCCESS_RESPONSE;
       }
 
-      await jstepPostBurmCredentialsRecoveryToken({
-        burmUserId: profile.burmUserId,
-        bcpmStatusId: profile.bcpmStatusId,
-        burmUserEmail: profile.burmUserEmail,
+      await jstepPostBurmCredentialTemporaryTokens({
+        burmUserId: profile.burmUser.burmUserId,
+        bcpmStatusId: profile.burmProfile.bcpmStatusId,
+        bcpmDepartmentId: profile.burmProfile.bcpmDepartmentId,
+        bcpmRoleId: profile.burmProfile.bcpmRoleId,
         obfuscatedUsername,
-        postBurmCredentialsRecoveryToken: this.postBurmCredentialsRecoveryToken,
+        postBurmCredentialTemporaryTokens: this.postBurmCredentialTemporaryTokens,
         logger: this.logger,
       });
 
