@@ -1,46 +1,46 @@
 import type {
   AuthForgotPasswordLogger,
-  GetBcpmStatusesOneOutput,
-  GetBcpmStatusesOnePort,
+  GetBcpmStatusValidateActiveResponse,
+  GetBcpmStatusValidateActivePort,
 } from "../../contract/index.contract.js";
 import { AuthForgotPasswordErrorConnectionBcpm } from "../../errors/index.errors.js";
 
-export const jstepGetBcpmStatusesOne = async ({
+export const stepGetBcpmStatusValidateActive = async ({
   bcpmStatusId,
-  obfuscatedUsername,
-  getBcpmStatusesOne,
+  username,
+  getBcpmStatusValidateActive,
   logger,
 }: {
   bcpmStatusId: string;
-  obfuscatedUsername: string;
-  getBcpmStatusesOne: GetBcpmStatusesOnePort;
+  username: string;
+  getBcpmStatusValidateActive: GetBcpmStatusValidateActivePort;
   logger: AuthForgotPasswordLogger;
 }
-): Promise<GetBcpmStatusesOneOutput | null> => {
+): Promise<GetBcpmStatusValidateActiveResponse | null> => {
   let status;
 
-  logger.info("Calling BCPM getBcpmStatusesOne", {
-    username: obfuscatedUsername,
+  logger.info("Calling BCPM getBcpmStatusValidateActive", {
+    username,
     bcpmStatusId,
   });
 
   try {
-    status = await getBcpmStatusesOne({ bcpmStatusId });
+    status = await getBcpmStatusValidateActive({ bcpmStatusId });
   } catch {
     logger.error("Failed during BCPM status lookup", {
-      username: obfuscatedUsername,
+      username: username,
     });
     throw AuthForgotPasswordErrorConnectionBcpm;
   }
 
   logger.info("BCPM getBcpmStatusesOne succeeded", {
-    username: obfuscatedUsername,
+    username: username,
     statusKey: status.bcpmStatusKey,
   });
 
   if (!status.bcpmStatusKey || status.bcpmStatusKey !== "ACTIVE") {
     logger.info("Profile inactive, returning generic success", {
-      username: obfuscatedUsername,
+      username: username,
       statusKey: status.bcpmStatusKey,
     });
     return null;

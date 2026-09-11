@@ -28,9 +28,9 @@ server.post("/auth/forgot-password", { schema: AuthForgotPasswordSwagger }, asyn
         username: body.username,
       },
       ports: {
-        getBurmUserProfileIdentifiersUniquePort: mockGetBurmUserProfileIdentifiersUniqueOKPort,
+        getBurmUserProfileIdentifierPort: mockGetBurmUserProfileIdentifiersUniqueOKPort,
         getBcpmStatusesOnePort: mockGetBcpmStatusesOneOKPort,
-        postBurmCredentialTemporaryTokensPort: mockPostBurmCredentialTemporaryTokensOKPort,
+        createBurmCredentialTemporaryTokenPort: mockPostBurmCredentialTemporaryTokensOKPort,
       },
       logger: requestLogger,
     };
