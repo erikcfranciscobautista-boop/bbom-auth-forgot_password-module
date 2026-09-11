@@ -1,0 +1,2 @@
+export { AuthForgotPasswordInSchema, type AuthForgotPasswordInDto } from "./authForgotPassword.in.dto.js";
+export { AuthForgotPasswordOutSchema, type AuthForgotPasswordOutDto } from "./authForgotPassword.out.dto.js";

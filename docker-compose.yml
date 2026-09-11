@@ -1,0 +1,19 @@
+services:
+  service-auth-forgot-password:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: container-auth-forgot-password
+    ports:
+      - "3000:3000"
+    command: npm run localhost
+    volumes:
+      - .:/app
+      - /app/node_modules
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+        - action: rebuild
+          path: package.json

@@ -1,0 +1,1 @@
+export { SUCCESS_RESPONSE } from "./authForgotPasswordGeneric.ok.js";
