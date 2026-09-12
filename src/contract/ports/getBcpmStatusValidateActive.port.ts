@@ -3,7 +3,7 @@ export interface GetBcpmStatusValidateActiveRequest {
 }
 
 export interface GetBcpmStatusValidateActiveResponse {
-  validate: boolean;
+  validated: boolean;
 }
 
 export type GetBcpmStatusValidateActivePort = (
