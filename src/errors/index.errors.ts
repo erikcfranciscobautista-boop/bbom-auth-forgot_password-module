@@ -1,6 +1,4 @@
 export {
-  AuthForgotPasswordErrorConnectionBcpm,
-  AuthForgotPasswordErrorConnectionBurm,
+  AuthForgotPasswordErrorService,
   AuthForgotPasswordErrorFormat,
-  AuthForgotPasswordErrorInternal,
 } from "./authForgotPassword.errors.js";

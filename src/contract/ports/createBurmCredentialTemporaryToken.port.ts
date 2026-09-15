@@ -5,6 +5,9 @@ export interface CreateBurmCredentialTemporaryTokenRequest {
   bcpmRoleId: string;
 }
 
+export interface CreateBurmCredentialTemporaryTokenResponse {
+  token: string;
+}
 export type CreateBurmCredentialTemporaryTokenPort = (
   input: CreateBurmCredentialTemporaryTokenRequest,
-) => Promise<void>;
+) => Promise<CreateBurmCredentialTemporaryTokenResponse>;

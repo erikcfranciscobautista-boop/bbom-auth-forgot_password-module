@@ -15,7 +15,7 @@ export interface AuthForgotPasswordContract {
   req: unknown;
   ports: {
     getBurmUserProfileIdentifierPort: GetBurmUserProfileIdentifierPort;
-    getBcpmStatusesOnePort: GetBcpmStatusValidateActivePort;
+    getBcpmStatusValidateActivePort: GetBcpmStatusValidateActivePort;
     createBurmCredentialTemporaryTokenPort: CreateBurmCredentialTemporaryTokenPort;
   };
   logger?: AuthForgotPasswordLogger;
@@ -31,5 +31,6 @@ export type {
   GetBurmUserProfileIdentifierPort,
 
   CreateBurmCredentialTemporaryTokenRequest,
+  CreateBurmCredentialTemporaryTokenResponse,
   CreateBurmCredentialTemporaryTokenPort,
 } from './ports/index.ports.ts'

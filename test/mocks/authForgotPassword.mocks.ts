@@ -26,12 +26,14 @@ export const mockGetBurmUserProfileIdentifiersUniqueOKPort = async ({
 
 export const mockGetBcpmStatusesOneOKPort = async () => {
   return {
-    validate: true,
+    validated: true,
   };
 };
 
 export const mockPostBurmCredentialTemporaryTokensOKPort = async () => {
-  return;
+  return {
+    token : "temporary-token-1"
+  };
 };
 
 export const buildHappyPathContract = (
@@ -41,7 +43,7 @@ export const buildHappyPathContract = (
     req,
     ports: {
       getBurmUserProfileIdentifierPort: mockGetBurmUserProfileIdentifiersUniqueOKPort,
-      getBcpmStatusesOnePort: mockGetBcpmStatusesOneOKPort,
+      getBcpmStatusValidateActivePort: mockGetBcpmStatusesOneOKPort,
       createBurmCredentialTemporaryTokenPort: mockPostBurmCredentialTemporaryTokensOKPort,
     },
     logger: {

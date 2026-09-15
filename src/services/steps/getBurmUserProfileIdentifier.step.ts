@@ -4,45 +4,31 @@ import type {
   GetBurmUserProfileIdentifierResponse,
   GetBurmUserProfileIdentifierPort,
 } from "../../contract/index.contract.js";
-import { AuthForgotPasswordErrorConnectionBurm } from "../../errors/index.errors.js";
+import { AuthForgotPasswordErrorService } from "../../errors/index.errors.js";
+import { SUCCESS_RESPONSE } from "../../response/index.response.js";
 import { getStatusCode } from "../../utils/index.utils.js";
 
-export const stepGetBurmUserProfileIdentifier = async ({
-  username,
-  getBurmUserProfileIdentifier,
-  logger,
-}: {
-  username: string;
-  getBurmUserProfileIdentifier: GetBurmUserProfileIdentifierPort;
-  logger: AuthForgotPasswordLogger;
-}
-): Promise<GetBurmUserProfileIdentifierResponse | null> => {
-  logger.info("Calling BURM getBurmUserProfileIdentifier", {
-    username: username,
-  });
-
+export const stepGetBurmUserProfileIdentifier = async (
+  request: GetBurmUserProfileIdentifierRequest,
+  getBurmUserProfileIdentifier: GetBurmUserProfileIdentifierPort,
+  logger: AuthForgotPasswordLogger
+): Promise<GetBurmUserProfileIdentifierResponse> => {
+  logger.info("step : getBurmUserProfileIdentifier ", {username: request.username});
   try {
-    const profile = await getBurmUserProfileIdentifier({username});
-
-    logger.info("BURM getBurmUserProfileIdentifier succeeded", {
-      username: username,
-    });
-
-    return profile;
+    const response = await getBurmUserProfileIdentifier({username: request.username});
+    logger.info("step : getBurmUserProfileIdentifier succeeded");
+    return response;
   } catch (error) {
+    logger.error?.('step : getBurmUserProfileIdentifier failed', error);
     const statusCode = getStatusCode(error);
-
     if (statusCode === 401 || statusCode === 404) {
-      logger.info("Profile not available, returning generic success", {
-        username: username,
-        statusCode,
-      });
-      return null;
+        logger.info("step : getBurmUserProfileIdentifier is error due to status code", {
+          username: request.username,
+          statusCode,
+        });
+        throw SUCCESS_RESPONSE;
     }
-
-    logger.error("Failed during BURM profile identifiers lookup", {
-      username: username,
-    });
-    throw AuthForgotPasswordErrorConnectionBurm;
+      logger.error("step : getBurmUserProfileIdentifier is unexpected error", request);
+    throw AuthForgotPasswordErrorService;
   }
 };

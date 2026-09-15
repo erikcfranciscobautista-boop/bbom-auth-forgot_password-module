@@ -1,3 +1,3 @@
-export { stepGetBcpmStatusValidateActive } from "./getBcpmStatusValidateActiveStep.js";
-export { stepPostBurmCredentialTemporaryToken } from "./createBurmCredentialTemporaryTokenStep.js";
-export { stepGetBurmUserProfileIdentifier } from "./getBurmUserProfileIdentifierStep.js";
+export { stepGetBcpmStatusValidateActive } from "./getBcpmStatusValidateActive.step.js";
+export { stepPostBurmCredentialTemporaryToken } from "./createBurmCredentialTemporaryToken.step.js";
+export { stepGetBurmUserProfileIdentifier } from "./getBurmUserProfileIdentifier.step.js";

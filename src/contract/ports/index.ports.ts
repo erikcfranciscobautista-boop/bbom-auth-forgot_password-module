@@ -5,6 +5,7 @@ export type {
 } from "./getBcpmStatusValidateActive.port.js";
 export type {
   CreateBurmCredentialTemporaryTokenRequest,
+  CreateBurmCredentialTemporaryTokenResponse,
   CreateBurmCredentialTemporaryTokenPort,
 } from "./createBurmCredentialTemporaryToken.port.js";
 export type {

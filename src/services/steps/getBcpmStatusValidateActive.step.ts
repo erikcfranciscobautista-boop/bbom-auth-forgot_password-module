@@ -1,50 +1,32 @@
 import type {
   AuthForgotPasswordLogger,
   GetBcpmStatusValidateActiveResponse,
+  GetBcpmStatusValidateActiveRequest,
   GetBcpmStatusValidateActivePort,
 } from "../../contract/index.contract.js";
-import { AuthForgotPasswordErrorConnectionBcpm } from "../../errors/index.errors.js";
+import { AuthForgotPasswordErrorService } from "../../errors/index.errors.js";
+import { SUCCESS_RESPONSE } from "../../response/index.response.js";
+import { getStatusCode } from "../../utils/index.utils.js";
 
-export const stepGetBcpmStatusValidateActive = async ({
-  bcpmStatusId,
-  username,
-  getBcpmStatusValidateActive,
-  logger,
-}: {
-  bcpmStatusId: string;
-  username: string;
-  getBcpmStatusValidateActive: GetBcpmStatusValidateActivePort;
-  logger: AuthForgotPasswordLogger;
-}
-): Promise<GetBcpmStatusValidateActiveResponse | null> => {
-  let status;
 
-  logger.info("Calling BCPM getBcpmStatusValidateActive", {
-    username,
-    bcpmStatusId,
-  });
+export const stepGetBcpmStatusValidateActive = async (
+  username: string,
+  request: GetBcpmStatusValidateActiveRequest,
+  getBcpmStatusValidateActive: GetBcpmStatusValidateActivePort,
+  logger: AuthForgotPasswordLogger
+): Promise<GetBcpmStatusValidateActiveResponse> => {
+  logger.info("step : getBcpmStatusValidateActive ", {username,request});
 
   try {
-    status = await getBcpmStatusValidateActive({ bcpmStatusId });
-  } catch {
-    logger.error("Failed during BCPM status lookup", {
-      username: username,
-    });
-    throw AuthForgotPasswordErrorConnectionBcpm;
+    const response = await getBcpmStatusValidateActive({ bcpmStatusId: request.bcpmStatusId });
+    logger.info("step : getBcpmStatusValidateActive succeeded");
+    if(!response.validated) {
+      logger.warn?.('step : getBcpmStatusValidateActive failed with ko');
+      throw SUCCESS_RESPONSE;
+    }
+    return response;
+  } catch(error) {
+    logger.error?.('step : getBcpmStatusValidateActive failed', error);
+    throw AuthForgotPasswordErrorService;
   }
-
-  logger.info("BCPM getBcpmStatusesOne succeeded", {
-    username: username,
-    statusKey: status.bcpmStatusKey,
-  });
-
-  if (!status.bcpmStatusKey || status.bcpmStatusKey !== "ACTIVE") {
-    logger.info("Profile inactive, returning generic success", {
-      username: username,
-      statusKey: status.bcpmStatusKey,
-    });
-    return null;
-  }
-
-  return status;
 };

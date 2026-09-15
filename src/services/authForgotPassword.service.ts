@@ -22,7 +22,7 @@ export class AuthForgotPasswordService {
 
   constructor(options: AuthForgotPasswordContract) {
     this.getBurmUserProfileIdentifier = options.ports.getBurmUserProfileIdentifierPort;
-    this.getBcpmStatusValidateActive = options.ports.getBcpmStatusesOnePort;
+    this.getBcpmStatusValidateActive = options.ports.getBcpmStatusValidateActivePort;
     this.postBurmCredentialTemporaryTokens = options.ports.createBurmCredentialTemporaryTokenPort;
     this.logger = options.logger ?? console;
   }
@@ -39,41 +39,36 @@ export class AuthForgotPasswordService {
       this.logger.info("Forgot password flow started", {
         username: request.username,
       });
-      const {username} = request;
 
-      const profile = await stepGetBurmUserProfileIdentifier({
-        username,
-        getBurmUserProfileIdentifier: this.getBurmUserProfileIdentifier,
-        logger: this.logger,
-      });
+      const profile = await stepGetBurmUserProfileIdentifier(
+        {username : request.username},
+        this.getBurmUserProfileIdentifier,
+        this.logger
+      );
 
-      if (!profile) {
-        return SUCCESS_RESPONSE;
-      }
+      await stepGetBcpmStatusValidateActive(
+        request.username,
+        {
+          bcpmStatusId: profile.burmProfile.bcpmStatusId,
+        },
+        this.getBcpmStatusValidateActive,
+        this.logger,
+      );
 
-      const status = await stepGetBcpmStatusValidateActive({
-        bcpmStatusId: profile.burmProfile.bcpmStatusId,
-        username: username,
-        getBcpmStatusValidateActive: this.getBcpmStatusValidateActive,
-        logger: this.logger,
-      });
-
-      if (!status || !status.validate) {
-        return SUCCESS_RESPONSE;
-      }
-
-      await stepPostBurmCredentialTemporaryToken({
-        burmUserId: profile.burmUser.burmUserId,
-        bcpmStatusId: profile.burmProfile.bcpmStatusId,
-        bcpmDepartmentId: profile.burmProfile.bcpmDepartmentId,
-        bcpmRoleId: profile.burmProfile.bcpmRoleId,
-        username: username,
-        createBurmCredentialTemporaryToken: this.postBurmCredentialTemporaryTokens,
-        logger: this.logger,
-      });
+      await stepPostBurmCredentialTemporaryToken(
+        request.username,
+        {
+          burmUserId: profile.burmUser.burmUserId,
+          bcpmStatusId: profile.burmProfile.bcpmStatusId,
+          bcpmDepartmentId: profile.burmProfile.bcpmDepartmentId,
+          bcpmRoleId: profile.burmProfile.bcpmRoleId,
+        },
+        this.postBurmCredentialTemporaryTokens,
+        this.logger
+      );
 
       this.logger.info("Forgot password flow finished", {
-        username: username,
+        username: request.username,
       });
 
       this.logger.info("-----------------------------------------------------");
@@ -82,6 +77,9 @@ export class AuthForgotPasswordService {
 
       return SUCCESS_RESPONSE;
     } catch (error) {
+      if(error === SUCCESS_RESPONSE){
+        return SUCCESS_RESPONSE;
+      }
       this.logger.error("Error in executeAuthForgotPasswordService", {
         error,
       });

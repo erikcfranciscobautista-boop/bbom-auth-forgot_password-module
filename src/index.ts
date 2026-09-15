@@ -1,10 +1,8 @@
 export { authForgotPassword } from "./authForgotPassword.js";
 export { AuthForgotPasswordError } from "./errors/index.error.js";
 export {
-  AuthForgotPasswordErrorConnectionBcpm,
-  AuthForgotPasswordErrorConnectionBurm,
   AuthForgotPasswordErrorFormat,
-  AuthForgotPasswordErrorInternal,
+  AuthForgotPasswordErrorService,
 } from "./errors/index.errors.js";
 export type { AuthForgotPasswordContract } from "./contract/index.contract.js";
 export type {

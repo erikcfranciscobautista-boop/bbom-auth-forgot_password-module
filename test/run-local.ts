@@ -2,7 +2,7 @@ import Fastify from "fastify";
 import {
   authForgotPassword,
   AuthForgotPasswordError,
-  AuthForgotPasswordErrorInternal,
+  AuthForgotPasswordErrorService,
   AuthForgotPasswordSwagger,
   type AuthForgotPasswordContract,
 } from "../src/index.js";
@@ -29,7 +29,7 @@ server.post("/auth/forgot-password", { schema: AuthForgotPasswordSwagger }, asyn
       },
       ports: {
         getBurmUserProfileIdentifierPort: mockGetBurmUserProfileIdentifiersUniqueOKPort,
-        getBcpmStatusesOnePort: mockGetBcpmStatusesOneOKPort,
+        getBcpmStatusValidateActivePort: mockGetBcpmStatusesOneOKPort,
         createBurmCredentialTemporaryTokenPort: mockPostBurmCredentialTemporaryTokensOKPort,
       },
       logger: requestLogger,
@@ -38,7 +38,7 @@ server.post("/auth/forgot-password", { schema: AuthForgotPasswordSwagger }, asyn
     const result = await authForgotPassword(mockContract);
     reply.status(200).send(result);
   } catch (error) {
-    const mapped = error instanceof AuthForgotPasswordError ? error : AuthForgotPasswordErrorInternal;
+    const mapped = error instanceof AuthForgotPasswordError ? error : AuthForgotPasswordErrorService;
     reply.status(mapped.statusCode).send(mapped);
   }
 });
